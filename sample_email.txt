@@ -1,0 +1,11 @@
+Subject: Urgent Account Verification
+
+Dear Customer,
+
+Your account has been suspended.
+
+Click the link below to verify your account.
+
+https://secure-bank-login.xyz/verify
+
+Failure to verify within 24 hours will result in permanent suspension.
