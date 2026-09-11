@@ -1,1 +1,0 @@
-# CatchThePhish source package
