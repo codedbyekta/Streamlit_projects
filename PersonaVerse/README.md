@@ -1,4 +1,4 @@
-# 🌌 Upgrading the AI Multiverse
+# 🌌 AI Multiverse [Stateless]
 
 A Streamlit + Gemini AI chatbot with **creative AI personalities, adjustable intensity, sidebar settings, chat bubbles, and dynamic avatars**.
 
@@ -37,19 +37,11 @@ GEMINI_API_KEY=your_api_key_here
 ## 📂 Project Structure
 
 ```text
-Upgrading-AI-Multiverse/
+AI-Multiverse/
 ├── app.py
 ├── .env
 └── README.md
 ```
-
-## 🎯 Assignment Tasks
-
-* [x] Task 1: Sidebar Integration
-* [x] Task 2: Persona Expansion
-* [x] Task 3: Intensity Slider & Prompt Engineering
-* [x] Task 4: Chat UI
-* [x] Task 5: Dynamic Avatars
 
 ## 🎥 Submission
 
