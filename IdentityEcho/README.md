@@ -1,7 +1,5 @@
 # 🌀 The Identity Echo Interface
 
-A simple **Streamlit** application built for Session 2 to practice user input, button actions, validation, and conditional output.
-
 ## ✨ Features
 
 * Collects **Name** and **Message**
@@ -33,14 +31,4 @@ Identity-Echo-Interface/
 ├── app.py
 └── README.md
 ```
-
-## 🎯 Assignment Tasks
-
-* [x] Task 1: UI Shell
-* [x] Task 2: Multi-Data Collection
-* [x] Task 3: Action Gate
-* [x] Task 4: Conditional Routing
-* [x] Task 5: Formatted Output
-* [x] Advanced Challenge: Token Cost Estimator
-
 **Author:** Ekta
