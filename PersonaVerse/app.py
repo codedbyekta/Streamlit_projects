@@ -6,12 +6,12 @@ from dotenv import load_dotenv
 st.title("THE MULTIVERSE OF CHATBOTS")
 st.write("Choose a personality and chat with the AI.")
 
-# Task 1: Sidebar Integration
+# Sidebar Integration
 st.sidebar.title("App Settings")
 
 personality = st.sidebar.selectbox(
     "Who do you want to talk to?",
-    # TASK 2: PERSONA EXPANSION
+    # PERSONA EXPANSION
     # Added more creative personalities
     [
         "An expert Hacker",
@@ -28,7 +28,7 @@ personality = st.sidebar.selectbox(
     ]
 )
 
-# Task 3: Intensity Slider
+# Intensity Slider
 intensity = st.sidebar.slider(
     "Intensity Level",
     min_value=1,
@@ -47,7 +47,7 @@ if st.button("SEND"):
 
     if user_message:
 
-        # Task 5: Dynamic Avatars
+        # Dynamic Avatars
         if personality == "An expert Hacker":
             bot_avatar = "💻"
 
@@ -81,7 +81,7 @@ if st.button("SEND"):
         elif personality == "A highly sarcastic fitness coach":
             bot_avatar = "🏋️"
 
-        # Task 3: Prompt Engineering
+        # Prompt Engineering
         ai_instructions = (
             f"You are acting as {personality}. "
             f"Your personality intensity level is {intensity} out of 10. "
@@ -99,11 +99,11 @@ if st.button("SEND"):
                 contents=ai_instructions
             )
 
-        # Task 4: Chat UI
+        # Chat UI
         with st.chat_message("user"):
             st.write(user_message)
 
-        # Task 5: Use Dynamic Avatar
+        # Use Dynamic Avatar
         with st.chat_message("assistant", avatar=bot_avatar):
             st.write(response.text)
 
