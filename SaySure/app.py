@@ -1,28 +1,3 @@
-"""
-SaySure
-Speaking Practice Coach
-
-Purpose:
-Help the user practice how to represent what they know clearly,
-concisely, and under pressure.
-
-Flow:
-1. Generate speaking-practice questions.
-2. User records an answer.
-3. Transcribe the answer.
-4. Analyze communication.
-5. If understanding is uncertain, ask targeted follow-ups.
-6. Follow-ups are based on the user's actual answer.
-7. After understanding is sufficiently demonstrated OR the maximum
-   number of follow-ups is reached, give final feedback.
-8. User can retry the original question.
-9. Practice history is stored locally.
-
-Important:
-SaySure is NOT trying to decide whether the user would pass an interview.
-It is a speaking practice application.
-"""
-
 import uuid
 import sqlite3
 import json
@@ -41,31 +16,20 @@ from gemini_client import (
     evaluate_technical_with_followup,
 )
 
-
-# ============================================================
 # PAGE CONFIGURATION
-# ============================================================
-
 st.set_page_config(
     page_title="SaySure",
     page_icon="🎙️",
     layout="wide",
 )
 
-
-# ============================================================
 # CONSTANTS
-# ============================================================
-
 MAX_FOLLOWUPS_PER_QUESTION = 3
 
 DB_PATH = "viva_panel_history.db"
 
 
-# ============================================================
 # DATABASE FOR SAYSURE
-# ============================================================
-
 def init_saysure_db():
     """
     Creates a separate SaySure table.
@@ -215,10 +179,7 @@ def get_saysure_session(session_id):
 init_saysure_db()
 
 
-# ============================================================
 # SESSION STATE
-# ============================================================
-
 defaults = {
 
     # Current application stage
@@ -282,10 +243,7 @@ for key, value in defaults.items():
         st.session_state[key] = value
 
 
-# ============================================================
 # HELPER FUNCTIONS
-# ============================================================
-
 def create_question(
     text,
     is_followup=False,
@@ -328,10 +286,7 @@ def reset_session():
         st.session_state[key] = value
 
 
-# ============================================================
 # PROMPTS USED DIRECTLY BY SAY SURE
-# ============================================================
-
 def get_communication_analysis_prompt(
     question,
     answer,
@@ -554,10 +509,7 @@ Return ONLY valid JSON:
 """
 
 
-# ============================================================
 # SIDEBAR
-# ============================================================
-
 with st.sidebar:
 
     st.title("🎙️ SaySure")
@@ -569,10 +521,8 @@ with st.sidebar:
 
     st.divider()
 
-    # --------------------------------------------------------
+  
     # API KEY
-    # --------------------------------------------------------
-
     api_key = st.text_input(
         "Gemini API Key",
         type="password",
@@ -626,10 +576,7 @@ with st.sidebar:
         st.rerun()
 
 
-# ============================================================
 # HISTORY
-# ============================================================
-
 if st.session_state.view == "history":
 
     st.title("📚 SaySure Practice History")
@@ -790,10 +737,7 @@ if st.session_state.view == "history":
     st.stop()
 
 
-# ============================================================
 # STAGE 1 — SETUP
-# ============================================================
-
 if st.session_state.stage == "setup":
 
     st.title("🎙️ SaySure")
@@ -927,10 +871,7 @@ if st.session_state.stage == "setup":
                 )
 
 
-# ============================================================
 # STAGE 2 — PRACTICE
-# ============================================================
-
 elif st.session_state.stage == "practice":
 
     questions = st.session_state.questions
@@ -961,10 +902,7 @@ elif st.session_state.stage == "practice":
         current_question_data["id"]
     )
 
-    # --------------------------------------------------------
     # PROGRESS
-    # --------------------------------------------------------
-
     st.progress(
         (idx + 1) / len(questions),
         text=(
@@ -973,10 +911,7 @@ elif st.session_state.stage == "practice":
         ),
     )
 
-    # --------------------------------------------------------
     # QUESTION HEADER
-    # --------------------------------------------------------
-
     if (
         st.session_state.question_state
         == "followup"
@@ -1014,19 +949,13 @@ elif st.session_state.stage == "practice":
 
     st.divider()
 
-    # --------------------------------------------------------
     # AUDIO
-    # --------------------------------------------------------
-
     audio = st.audio_input(
         "🎙️ Record your answer",
         key=f"audio_{current_question_id}",
     )
 
-    # --------------------------------------------------------
     # SUBMIT
-    # --------------------------------------------------------
-
     submitted = st.button(
         "Submit Answer →",
         key=f"submit_{current_question_id}",
@@ -1063,10 +992,7 @@ elif st.session_state.stage == "practice":
                     audio_hash
                 )
 
-                # ====================================================
                 # STEP 1 — TRANSCRIPTION
-                # ====================================================
-
                 try:
 
                     with st.spinner(
@@ -1097,10 +1023,7 @@ elif st.session_state.stage == "practice":
 
                     st.stop()
 
-                # ====================================================
                 # FOLLOW-UP ANSWER
-                # ====================================================
-
                 if (
                     st.session_state.question_state
                     == "followup"
@@ -1115,10 +1038,7 @@ elif st.session_state.stage == "practice":
                         answer_text
                     )
 
-                    # ----------------------------------------------
                     # Check understanding
-                    # ----------------------------------------------
-
                     followup_prompt = (
                         get_communication_analysis_prompt(
                             current_followup["question"],
@@ -1154,10 +1074,7 @@ elif st.session_state.stage == "practice":
                         "analysis"
                     ] = followup_analysis
 
-                    # ----------------------------------------------
                     # Ask AI whether understanding is now enough
-                    # ----------------------------------------------
-
                     verification_prompt = (
                         get_followup_prompt(
                             current_question,
@@ -1191,10 +1108,7 @@ elif st.session_state.stage == "practice":
 
                         st.stop()
 
-                    # ------------------------------------------------
                     # UNDERSTANDING IS SUFFICIENT
-                    # ------------------------------------------------
-
                     if not verification.get(
                         "follow_up_needed",
                         False,
@@ -1204,10 +1118,7 @@ elif st.session_state.stage == "practice":
                             "final_feedback"
                         )
 
-                    # ------------------------------------------------
                     # ASK ANOTHER FOLLOW-UP
-                    # ------------------------------------------------
-
                     elif (
                         st.session_state.followups_used
                         < MAX_FOLLOWUPS_PER_QUESTION
@@ -1242,10 +1153,7 @@ elif st.session_state.stage == "practice":
                                 "final_feedback"
                             )
 
-                    # ------------------------------------------------
                     # MAX FOLLOW-UPS REACHED
-                    # ------------------------------------------------
-
                     else:
 
                         st.session_state.question_state = (
@@ -1254,19 +1162,15 @@ elif st.session_state.stage == "practice":
 
                     st.rerun()
 
-                # ====================================================
                 # MAIN ANSWER
-                # ====================================================
-
                 else:
 
                     st.session_state.current_answer = (
                         answer_text
                     )
 
-                    # ----------------------------------------------
+
                     # Analyze communication
-                    # ----------------------------------------------
 
                     communication_prompt = (
                         get_communication_analysis_prompt(
@@ -1301,9 +1205,8 @@ elif st.session_state.stage == "practice":
                         analysis
                     )
 
-                    # ------------------------------------------------
+
                     # DECIDE WHETHER UNDERSTANDING NEEDS TESTING
-                    # ------------------------------------------------
 
                     if analysis.get(
                         "understanding_uncertain",
@@ -1386,10 +1289,8 @@ elif st.session_state.stage == "practice":
                     st.rerun()
 
 
-# ============================================================
-# FINAL FEEDBACK
-# ============================================================
 
+# FINAL FEEDBACK
 if (
     st.session_state.stage == "practice"
     and st.session_state.question_state
@@ -1420,10 +1321,7 @@ if (
         st.session_state.followups
     )
 
-    # ========================================================
     # FINAL FEEDBACK
-    # ========================================================
-
     final_prompt = get_final_feedback_prompt(
         question,
         answer,
@@ -1453,10 +1351,7 @@ if (
 
         st.stop()
 
-    # ========================================================
     # SCORE CARDS
-    # ========================================================
-
     col1, col2, col3, col4 = st.columns(4)
 
     col1.metric(
@@ -1479,10 +1374,7 @@ if (
         f"{final_feedback.get('understanding_score', 0)}/10",
     )
 
-    # ========================================================
     # UNDERSTANDING
-    # ========================================================
-
     st.subheader(
         "🧠 Did you demonstrate understanding?"
     )
@@ -1494,10 +1386,7 @@ if (
         )
     )
 
-    # ========================================================
     # COMMUNICATION
-    # ========================================================
-
     st.subheader(
         "🗣️ How clearly did you represent it?"
     )
@@ -1509,10 +1398,7 @@ if (
         )
     )
 
-    # ========================================================
     # WHAT WENT WELL
-    # ========================================================
-
     st.subheader(
         "✅ What went well"
     )
@@ -1524,10 +1410,7 @@ if (
         )
     )
 
-    # ========================================================
     # WHAT TO IMPROVE
-    # ========================================================
-
     st.subheader(
         "🔧 What to improve"
     )
@@ -1539,10 +1422,7 @@ if (
         )
     )
 
-    # ========================================================
     # FILLERS
-    # ========================================================
-
     filler_count = communication.get(
         "filler_count",
         0,
@@ -1564,10 +1444,7 @@ if (
             + ", ".join(fillers)
         )
 
-    # ========================================================
     # FOLLOW-UP SUMMARY
-    # ========================================================
-
     if followups:
 
         st.subheader(
@@ -1599,10 +1476,8 @@ if (
                     f"{followup.get('answer', '')}"
                 )
 
-    # ========================================================
-    # RETRY INSTRUCTION
-    # ========================================================
 
+    # RETRY INSTRUCTION
     st.subheader(
         "🎯 Your next attempt"
     )
@@ -1614,10 +1489,8 @@ if (
         )
     )
 
-    # ========================================================
-    # SAVE CURRENT RECORD
-    # ========================================================
 
+    # SAVE CURRENT RECORD
     if not st.session_state.current_record_saved:
 
         record = {
@@ -1642,10 +1515,8 @@ if (
             True
         )
 
-    # ========================================================
-    # RETRY / NEXT
-    # ========================================================
 
+    # RETRY / NEXT
     st.divider()
 
     col1, col2 = st.columns(2)
@@ -1697,11 +1568,7 @@ if (
 
                 st.rerun()
 
-
-# ============================================================
 # RESULTS
-# ============================================================
-
 if st.session_state.stage == "results":
 
     st.title(
@@ -1720,10 +1587,7 @@ if st.session_state.stage == "results":
 
         st.stop()
 
-    # ========================================================
     # AVERAGES
-    # ========================================================
-
     clarity_scores = [
         r["communication"].get(
             "clarity",
@@ -1776,10 +1640,7 @@ if st.session_state.stage == "results":
         / len(understanding_scores)
     )
 
-    # ========================================================
     # SCORE CARDS
-    # ========================================================
-
     col1, col2, col3, col4 = st.columns(4)
 
     col1.metric(
@@ -1804,10 +1665,7 @@ if st.session_state.stage == "results":
 
     st.divider()
 
-    # ========================================================
     # QUESTION PERFORMANCE
-    # ========================================================
-
     st.subheader(
         "📈 Performance Across Questions"
     )
@@ -1869,10 +1727,7 @@ if st.session_state.stage == "results":
 
     st.divider()
 
-    # ========================================================
     # MAIN PATTERNS
-    # ========================================================
-
     st.subheader(
         "🎯 What to work on"
     )
@@ -1894,10 +1749,7 @@ if st.session_state.stage == "results":
                 f"• {improvement}"
             )
 
-    # ========================================================
     # SAVE SESSION
-    # ========================================================
-
     if not st.session_state.saved_to_db:
 
         try:
@@ -1944,10 +1796,7 @@ if st.session_state.stage == "results":
             "✅ Practice session saved."
         )
 
-    # ========================================================
     # NEW PRACTICE
-    # ========================================================
-
     st.divider()
 
     if st.button(
