@@ -1,6 +1,6 @@
-# 🌌 AI Multiverse [Stateless]
+# 🌌 AI Multiverse 
 
-A Streamlit + Gemini AI chatbot with **creative AI personalities, adjustable intensity, sidebar settings, chat bubbles, and dynamic avatars**.
+A **stateless Streamlit + Gemini AI chatbot** with **creative AI personalities, adjustable intensity, sidebar settings, chat bubbles, and dynamic avatars**.
 
 ## ✨ Features
 
