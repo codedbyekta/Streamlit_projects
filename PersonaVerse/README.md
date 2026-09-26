@@ -42,10 +42,4 @@ AI-Multiverse/
 ├── .env
 └── README.md
 ```
-
-## 🎥 Submission
-
-* Screen recording of the local web application
-* Updated `app.py`
-
 **Author:** Ekta
