@@ -38,19 +38,19 @@ intensity = st.sidebar.slider(
     value=5
 )
 
-# TASK 1: Initialize the Memory Vault
+# Initialize the Memory Vault
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# TASK 2: Render the Chat History
+# Render the Chat History
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# TASK 3: Upgrade the Input UI
+# Upgrade the Input UI
 if user_message := st.chat_input("Say something..."):
 
-    # TASK 4: Save the User Message to Memory
+    # Save the User Message to Memory
     st.session_state.messages.append(
         {
             "role": "user",
@@ -88,7 +88,7 @@ User Message:
     with st.chat_message("assistant"):
         st.markdown(ai_response)
 
-    # TASK 4: Save the AI Response to Memory
+    # Save the AI Response to Memory
     st.session_state.messages.append(
         {
             "role": "assistant",
